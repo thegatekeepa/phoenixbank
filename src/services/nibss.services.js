@@ -19,20 +19,12 @@ const validateBVN = async (bvn) => {
 
     return response.data;
   } catch (error) {
-    console.error(
-      "Error validating BVN:",
-      error.response?.data || error.message
-    );
-
-    throw error;
+    console.error("Error validating BVN:", error.message);
+    throw error; // rethrow the error for the caller to handle
   }
 };
 
-module.exports = {
-  validateBVN,
-};
-
-
+//account creation logic to be called by the onboarding controller for account creation after bvn validation
 const createAccount = async (payload) => {
   try {
     const nibssResponse = await axios.post(
@@ -51,9 +43,7 @@ const createAccount = async (payload) => {
   }
 };
 
-const NibssService = {
+module.exports = {
   validateBVN,
-  createAccount,
+    createAccount
 };
-
-module.exports = NibssService;

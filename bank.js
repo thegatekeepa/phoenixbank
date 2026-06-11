@@ -4,20 +4,28 @@ const connectDB = require("./src/configs/database");
 
 dotenv.config();
 connectDB();
-const app = express();
-app.use(express.json());
+const bank = express();
+bank.use(express.json());
 
 
 const PORT = process.env.PhoPort || 2020;
-  app.listen(PORT, () => {
+  bank.listen(PORT, () => {
     console.log(`Phoenix Bank Server has gone live on ${PORT}`);
   });
 
+//use check now
+const onboRoutes = require("./src/onboarding/onboardingRoute");
+
+bank.use("/api/customer", onboRoutes);
+
+
+
+
 //const onboardingRoutes = require("./src/routes/onboarding.routes");  
 //routes
-//app.use("/api/customer", onboardingRoutes);
-//app.use("/api/auth", require("./routes/authRoutes"));
-//app.use("/api/notes", require("./routes/noteRoutes"));
+//bank.use("/api/customer", onboardingRoutes);
+//bank.use("/api/auth", require("./routes/authRoutes"));
+//bank.use("/api/notes", require("./routes/noteRoutes"));
 
 
-module.exports = app;
+module.exports = bank;
