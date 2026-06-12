@@ -15,17 +15,10 @@ const PORT = process.env.PhoPort || 2020;
 
 //use check now
 const onboRoutes = require("./src/onboarding/onboardingRoute");
+const acctRouter = require("./src/accounts/accountRoute");
 
 bank.use("/api/customer", onboRoutes);
-
-
-
-
-//const onboardingRoutes = require("./src/routes/onboarding.routes");  
-//routes
-//bank.use("/api/customer", onboardingRoutes);
-//bank.use("/api/auth", require("./routes/authRoutes"));
-//bank.use("/api/notes", require("./routes/noteRoutes"));
+bank.use("/api/account", acctRouter);
 
 
 module.exports = bank;

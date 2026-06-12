@@ -1,17 +1,17 @@
 //main nibss contact logic to be called by the onboarding controller for bvn validation and account creation
 const axios = require("axios");
 
-const baseURL = process.env.NIBSS_BASE_URL;
-const phoNibssToken = process.env.Pho_ToKEN;
+//const baseURL = process.env.NIBSS_BASE_URL;
+//const NibssToken = process.env.PHO_TOKEN;
 
 const validateBVN = async (bvn) => {
   try {
     const response = await axios.post(
-      `${baseURL}/api/validateBvn`,
+      `${process.env.NIBSS_BASE_URL}/api/validateBvn`,
       { bvn },
       {
         headers: {
-          Authorization: `Bearer ${phoNibssToken}`,
+          Authorization: `Bearer ${process.env.PHO_TOKEN}`,
           "Content-Type": "application/json",
         },
       }
@@ -25,25 +25,36 @@ const validateBVN = async (bvn) => {
 };
 
 //account creation logic to be called by the onboarding controller for account creation after bvn validation
-const createAccount = async (payload) => {
+const createAccount = async (customerData) => {
   try {
-    const nibssResponse = await axios.post(
-      `${baseURL}/api/account/create`,
+    const payload = {
+      kycType: customerData.kycType,
+      kycID: customerData.kycID,
+      dob: customerData.dob,
+    };
+
+    console.log("PAYLOAD TO NIBSS:", payload);
+
+    const response = await axios.post(
+      `${process.env.NIBSS_BASE_URL}/api/account/create`, 
       payload,
-      {
-        headers: {
-          Authorization: `Bearer ${phoNibssToken}`,
+      {headers: {
+          Authorization: `Bearer ${process.env.PHO_TOKEN}`,
+          "Content-Type": "application/json",
         },
-      }
+      },
     );
-    return nibssResponse.data;
-  } catch (error) {
-    console.error("Error creating account:", error.message);
-    throw error; // rethrown for caller to handle
-  }
+    
+    return response.data;
+  } 
+  catch (error) {
+  console.log("STATUS:", error.response?.status);
+  console.log("DATA:", error.response?.data);
+  throw error;
+}
 };
 
 module.exports = {
   validateBVN,
-    createAccount
+  createAccount
 };
