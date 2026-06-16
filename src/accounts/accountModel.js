@@ -8,6 +8,12 @@ const accountSchema = new mongoose.Schema(
       required: true,
       unique: true, // to enforce one account per onboarded customer
     },
+    
+    bvn: {
+      type: String,
+      required: true,
+      unique: true, // to enforce one account per onboarded customer
+    },
 
     accountNumber: {
       type: String,

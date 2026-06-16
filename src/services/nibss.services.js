@@ -44,8 +44,38 @@ const createAccount = async (customerData) => {
         },
       },
     );
-    
-    return response.data;
+    console.log("NIBSS SUCCESS RESPONSE:", response.data);
+    //console.log(nibssResponse);
+    return response.data.account.accountNumber;
+  } 
+  catch (error) {
+  console.log("STATUS:", error.response?.status);
+  console.log("DATA:", error.response?.data);
+  throw error;
+}
+};
+
+//get single account details from NIBSS  
+const getAccountDetails = async (accountNumber) => {
+  try {
+    const payload = {
+      accountNumber: accountNumber,
+    };
+
+    console.log("PAYLOAD TO NIBSS:", payload);
+
+    const response = await axios.post(
+      `${process.env.NIBSS_BASE_URL}/api/account/name-enquiry/${accountNumber}`, 
+      payload,
+      {headers: {
+          Authorization: `Bearer ${process.env.PHO_TOKEN}`,
+          "Content-Type": "application/json",
+        },
+      },
+    );
+    console.log("NIBSS SUCCESS RESPONSE:", response.data);
+    //console.log(nibssResponse);
+    return response.data.account.accountNumber;
   } 
   catch (error) {
   console.log("STATUS:", error.response?.status);

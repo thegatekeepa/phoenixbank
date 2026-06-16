@@ -37,14 +37,19 @@ const createAccount = async (req, res) => {
       kycID,
       dob
     });
+    
+    console.log(
+      "CONTROLLER RECEIVED:", 
+      JSON.stringify(nibssResponse, null, 2));
 
-    // 5. Save account locally
+    // 5. Save account locally 
     const newAccount = await Account.create({
+      customerId: newCustomer._id,
       bvn: newCustomer.bvn,
-      accountNumber: nibssResponse.accountNumber,
+      accountNumber: nibssResponse,
       balance: 15000,
     });
-
+    
     return res.status(201).json({
       message: "Account created successfully",
       data: newAccount,
