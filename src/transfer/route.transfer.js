@@ -1,7 +1,11 @@
 const express = require("express");
 const transferRouter = express.Router();
-const { transferFunds } = require("./controller.transfer");
+const {
+    transferFunds, 
+    accountBalance
+} = require("./controller.transfer");
 
-transferRouter.post( "/transfer", transferController.transferFunds);
+transferRouter.post( "/transfer", transferFunds);
+transferRouter.get("/balance", accountBalance);
 
 module.exports = transferRouter;
