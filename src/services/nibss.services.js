@@ -1,8 +1,5 @@
-//main nibss contact logic to be called by the onboarding controller for bvn validation and account creation
+ //main nibss contact logic to be called by the onboarding controller for bvn validation and account creation
 const axios = require("axios");
-
-//const baseURL = process.env.NIBSS_BASE_URL;
-//const NibssToken = process.env.PHO_TOKEN;
 
 const validateBVN = async (bvn) => {
   try {
@@ -55,36 +52,52 @@ const createAccount = async (customerData) => {
 }
 };
 
-//get single account details from NIBSS  
-const getAccountDetails = async (accountNumber) => {
-  try {
-    const payload = {
-      accountNumber: accountNumber,
+
+//name enquiry logic to be called by the accounts controller for verifying account details before transactions
+const nameEnquiry = async (accountNumber) => {
+    try {
+      const response = await axios.post(
+        `${process.env.NIBSS_BASE_URL}/api/account/name-enquiry/${ accountNumber }`,
+        { accountNumber },
+        {
+          headers: {
+            Authorization: `Bearer ${process.env.PHO_TOKEN}`,
+          },
+        }
+      );
+      return response.data;
+    }
+      catch (error) {
+      console.log("STATUS:", error.response?.status);
+      console.log("DATA:", error.response?.data);
+      throw error;
     };
 
-    console.log("PAYLOAD TO NIBSS:", payload);
-
-    const response = await axios.post(
-      `${process.env.NIBSS_BASE_URL}/api/account/name-enquiry/${accountNumber}`, 
-      payload,
-      {headers: {
-          Authorization: `Bearer ${process.env.PHO_TOKEN}`,
-          "Content-Type": "application/json",
-        },
-      },
-    );
-    console.log("NIBSS SUCCESS RESPONSE:", response.data);
-    //console.log(nibssResponse);
-    return response.data.account.accountNumber;
-  } 
-  catch (error) {
-  console.log("STATUS:", error.response?.status);
-  console.log("DATA:", error.response?.data);
-  throw error;
-}
-};
+    // transfer funds after name enquiry & recipient verification succeeds
+  const transferFunds = async (payload) => {
+    try {
+      const response = await axios.post(
+        `${process.env.NIBSS_BASE_URL}/api/transfer`,
+        payload
+        );
+        {
+          headers: {
+            Authorization: `Bearer ${process.env.PHO_TOKEN}`
+          };
+        } 
+        return response.data;
+      } 
+      catch (error) {
+      console.log("STATUS:", error.response?.status);
+      console.log("DATA:", error.response?.data);
+      throw error;
+    }
+  };
 
 module.exports = {
   validateBVN,
-  createAccount
+  createAccount,
+  nameEnquiry,
+  transferFunds
 };
+}
