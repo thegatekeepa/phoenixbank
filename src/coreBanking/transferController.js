@@ -1,6 +1,7 @@
-const Account = require("../../accounts/accountModel");
-const Transaction = require("./model.transfer");
-const nibssService = require("../services/nibss.services");
+const Account = require("../register/accountModel");
+const Transfer = require("./transferModel");
+const NibssService = require("../services/nibss.services");
+//const { protect } = require("../utils/authMiddleware");
 
 const transferFunds = async (req, res) => {
   try {
@@ -8,6 +9,7 @@ const transferFunds = async (req, res) => {
       recipientAccountNumber,
       amount,
       narration,
+      type
     } = req.body;
 
     // Find sender account
@@ -22,11 +24,16 @@ const transferFunds = async (req, res) => {
     }
 
     // Check balance
-    if (senderAccount.balance < amount) {
-      return res.status(400).json({
-        message: "You don't have enough to send that amount. Add more money and try again.",
-      });
-    }
+    const liveBalance = await NibssService.getBalance(
+      senderAccount.accountNumber
+    );
+
+    if (liveBalance.balance < amount) {
+  return res.status(400).json({
+    message: 
+    `You don't have enough to transfer ${amount}, please check your account balance and try again.`
+  });
+}
    
     //prevent self transfer
     if (
@@ -34,17 +41,17 @@ const transferFunds = async (req, res) => {
     )
     {
         return res.status(400).json({
-            message: "You cannot transfer to your own account",
+            message: "You cannot transfer to yourself",
         });
     }
 
 
     // Name enquiry
-    const recipient = await nibssService.nameEnquiry(
+    const fundRecipient = await NibssService.nameEnquiry(
         recipientAccountNumber
     );
 
-    if (!recipient) {
+    if (!fundRecipient) {
       return res.status(404).json({
         message: "Recipient verification failed",
       });
@@ -52,7 +59,7 @@ const transferFunds = async (req, res) => {
 
     // Transfer
     const transferResponse =
-      await nibssService.transferFunds({
+      await NibssService.transferFunds({
         from: senderAccount.accountNumber,
         to: recipientAccountNumber,
         amount,
@@ -69,17 +76,17 @@ const transferFunds = async (req, res) => {
     }
 
     // Deduct balance
-    senderAccount.balance -= amount;
-
+    //senderAccount.balance -= amount;
     await senderAccount.save();
 
     // Save transaction
     const transferReceipt =
-      await Transaction.create({
-        transactionId: transferResponse.transactionId,
+      await Transfer.create({
+        reference: transferResponse.reference,
         senderAccount: senderAccount.accountNumber,
         receiverAccount: recipientAccountNumber,
         amount,
+        type,
         narration,
         status: transferResponse.status,
         initiatedBy: req.user.id,
@@ -98,35 +105,6 @@ const transferFunds = async (req, res) => {
   }
 };
 
-//get baalance logic
-const accountBalance = async (req, res) => {
-  try {
-    const account = await Account.findOne({
-      customerId: req.user.id,
-    });
-
-    if (!account) {
-      return res.status(404).json({
-        message: "Account not found",
-      });
-    }
-
-    const balanceResponse =
-      await nibssService.getBalance(
-        account.accountNumber
-      );
-
-    return res.status(200).json(balanceResponse);
-  } catch (error) {
-    console.log(error);
-
-    return res.status(500).json({
-      message: error.message,
-    });
-  }
-};
-
 module.exports = {
-  transferFunds,
-  accountBalance
+  transferFunds
 };

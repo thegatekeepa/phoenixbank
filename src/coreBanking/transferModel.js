@@ -1,12 +1,13 @@
+const { required } = require("joi");
 const mongoose = require("mongoose");
+
 
 const transferSchema = new mongoose.Schema(
   {
-    transactionId: {
+    reference: {
       type: String,
       unique: true,
       required: true,
-      //sparse: true,
     },
 
     senderAccount: {
@@ -24,15 +25,14 @@ const transferSchema = new mongoose.Schema(
       required: true,
     },
 
-    type: {
-      type: String,
-      enum: ["INTRA_BANK", "INTER_BANK"],
-      //default: "INTER_BANK",
-      required: true,
-    },
+    //type: {
+      //type: String,
+      //enum: ["INTRA_BANK", "INTER_BANK"],
+      //default: "INTER_BANK"
+    //},
 
     narration: {
-      type: String,
+      type: String
     },
 
     status: {
@@ -48,11 +48,12 @@ const transferSchema = new mongoose.Schema(
     initiatedBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Customer",
+      required: true
     },
   },
   { timestamps: true }
 );
 
 module.exports = mongoose.model(
-  "Transaction", transferSchema
+  "Transfer", transferSchema
 );

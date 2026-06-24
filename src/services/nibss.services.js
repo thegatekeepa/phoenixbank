@@ -56,9 +56,8 @@ const createAccount = async (customerData) => {
 //name enquiry logic to be called by the accounts controller for verifying account details before transactions
 const nameEnquiry = async (accountNumber) => {
   try {
-    const response = await axios.post(
+    const response = await axios.get(
       `${process.env.NIBSS_BASE_URL}/api/account/name-enquiry/${accountNumber}`,
-      { accountNumber },
       {
         headers: {
           Authorization: `Bearer ${process.env.PHO_TOKEN}`,

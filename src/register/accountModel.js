@@ -31,10 +31,10 @@ const accountSchema = new mongoose.Schema(
       required: true
     },
 
-    balance: {
-      type: Number,
-      default: 15000 // pre-fund condition
-    },
+    //balance: {
+      //type: Number,
+      //default: 15000 // pre-fund condition
+    //},
 
     provider: {
       type: String,

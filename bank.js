@@ -15,11 +15,13 @@ const PORT = process.env.PhoPort || 2020;
 
 const RegoRouter = require("./src/register/registerRoute");
 const loginRouter = require("./src/login/loginRoute");
-//const transferRouter = require("./src/coreBanking/route.transfer");
+const transferRouter = require("./src/coreBanking/transferRoute");
+const balRouter = require("./src/coreBanking/balanceRoute");
 
 bank.use("/api/account", RegoRouter);
 bank.use("/api/account", loginRouter);
-//bank.use("/api/account", transferRouter);
+bank.use("/api/account/funds", transferRouter);
+bank.use("/api/account", balRouter);
 
 
 module.exports = bank;
