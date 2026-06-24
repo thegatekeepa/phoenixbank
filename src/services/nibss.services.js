@@ -43,7 +43,7 @@ const createAccount = async (customerData) => {
     );
     console.log("NIBSS SUCCESS RESPONSE:", response.data);
     //console.log(nibssResponse);
-    return response.data.account.accountNumber;
+    return response.data;
   } 
   catch (error) {
   console.log("STATUS:", error.response?.status);

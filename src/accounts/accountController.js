@@ -1,5 +1,5 @@
 const Account = require("./accountModel");
-const Customer = require("../onboarding/customerModel");
+const Customer = require("../onboard/customerModel");
 const nibssService = require("../services/nibss.services");
 
 const createAccount = async (req, res) => {

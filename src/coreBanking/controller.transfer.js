@@ -1,4 +1,4 @@
-const Account = require("../accounts/accountModel");
+const Account = require("../../accounts/accountModel");
 const Transaction = require("./model.transfer");
 const nibssService = require("../services/nibss.services");
 

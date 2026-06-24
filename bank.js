@@ -13,13 +13,11 @@ const PORT = process.env.PhoPort || 2020;
     console.log(`Phoenix Bank Server has gone live on ${PORT}`);
   });
 
-const onboRoutes = require("./src/onboarding/onboardingRoute");
-const acctRouter = require("./src/accounts/accountRoute");
-const transferRouter = require("./src/transfer/route.transfer");
+const RegoRouter = require("./src/register/registerRoute");
+//const transferRouter = require("./src/coreBanking/route.transfer");
 
-bank.use("/api/customer", onboRoutes);
-bank.use("/api/account", acctRouter);
-bank.use("/api/account", transferRouter);
+bank.use("/api/account", RegoRouter);
+//bank.use("/api/account", transferRouter);
 
 
 module.exports = bank;
