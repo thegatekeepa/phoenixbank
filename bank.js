@@ -14,9 +14,11 @@ const PORT = process.env.PhoPort || 2020;
   });
 
 const RegoRouter = require("./src/register/registerRoute");
+const loginRouter = require("./src/login/loginRoute");
 //const transferRouter = require("./src/coreBanking/route.transfer");
 
 bank.use("/api/account", RegoRouter);
+bank.use("/api/account", loginRouter);
 //bank.use("/api/account", transferRouter);
 
 
