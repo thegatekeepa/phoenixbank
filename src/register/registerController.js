@@ -34,14 +34,12 @@ const registerCustomer = async (req, res) => {
 
     //requirement 1 -- bvn validation via Nibss
     const customerIdentity = await NibssService.validateBVN(bvn);
-    console.log("Bvn Validated and Customer Onboarded");
     
     //requirement 2 -- create account via Nibss
     const accountResponse = await NibssService.createAccount({
       kycType: "bvn", 
       kycID: bvn, 
       dob}); 
-    //const hashedPassword = await bcrypt.hash(password, 10);
 
     //save customer
     const savedCustomer = await Customer.create({
@@ -76,8 +74,6 @@ const registerCustomer = async (req, res) => {
       accountName: savedAccount.accountName
     })
   } catch (error) {
-    console.log("STATUS:", error.response?.status);
-    console.log("DATA:", error.response?.data);
     return res.status(500).json({
       message: error.message
     });

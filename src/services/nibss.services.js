@@ -30,8 +30,6 @@ const createAccount = async (customerData) => {
       dob: customerData.dob,
     };
 
-    console.log("PAYLOAD TO NIBSS:", payload);
-
     const response = await axios.post(
       `${process.env.NIBSS_BASE_URL}/api/account/create`, 
       payload,
@@ -41,13 +39,9 @@ const createAccount = async (customerData) => {
         },
       },
     );
-    console.log("NIBSS SUCCESS RESPONSE:", response.data);
-    //console.log(nibssResponse);
     return response.data;
   } 
   catch (error) {
-  console.log("STATUS:", error.response?.status);
-  console.log("DATA:", error.response?.data);
   throw error;
 }
 };
@@ -67,8 +61,6 @@ const nameEnquiry = async (accountNumber) => {
 
     return response.data;
   } catch (error) {
-    console.log("STATUS:", error.response?.status);
-    console.log("DATA:", error.response?.data);
     throw error;
   }
 };
@@ -87,8 +79,6 @@ const transferFunds = async (payload) => {
 
     return response.data;
   } catch (error) {
-    console.log("STATUS:", error.response?.status);
-    console.log("DATA:", error.response?.data);
     throw error;
   }
 };
@@ -106,8 +96,6 @@ const getBalance = async (accountNumber) => {
 
     return response.data;
   } catch (error) {
-    console.log("STATUS:", error.response?.status);
-    console.log("DATA:", error.response?.data);
     throw error;
   }
 };

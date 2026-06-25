@@ -1,7 +1,6 @@
 const Account = require("../register/accountModel");
 const Transfer = require("./transferModel");
 const NibssService = require("../services/nibss.services");
-//const { protect } = require("../utils/authMiddleware");
 
 const transferFunds = async (req, res) => {
   try {
@@ -84,7 +83,9 @@ const transferFunds = async (req, res) => {
       await Transfer.create({
         reference: transferResponse.reference,
         senderAccount: senderAccount.accountNumber,
+        senderName: senderAccount.accountName,
         receiverAccount: recipientAccountNumber,
+        receiverName: fundRecipient.accountName,
         amount,
         type,
         narration,

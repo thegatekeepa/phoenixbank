@@ -15,21 +15,23 @@ const transferSchema = new mongoose.Schema(
       required: true,
     },
 
+    senderName: {
+      type: String
+    },
+
     receiverAccount: {
       type: String,
       required: true,
+    },
+
+    receiverName: {
+      type: String
     },
 
     amount: {
       type: Number,
       required: true,
     },
-
-    //type: {
-      //type: String,
-      //enum: ["INTRA_BANK", "INTER_BANK"],
-      //default: "INTER_BANK"
-    //},
 
     narration: {
       type: String

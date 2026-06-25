@@ -79,12 +79,14 @@ const customerSchema = new mongoose.Schema({
 });
 
 //hash password before saving
-customerSchema.pre("save", async function () {
+customerSchema.pre(
+  "save", async function () {
   if (!this.isModified('password')) return; // Only hash if password is new/changed
 
   const salt = await bcrypt.genSalt(10); // Generate salt
   this.password = await bcrypt.hash(this.password, salt); // Hash password
-  });
+  }
+);
 
 //compare entered password with stored hash
 customerSchema.methods.comparePassword = async function (inputPassword) {
