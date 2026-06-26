@@ -7,7 +7,9 @@ connectDB();
 const bank = express();
 bank.use(express.json());
 
-
+bank.get("/", (req, res) => {
+  res.send("Welcome. This is the Phoenix Bank API");
+});
 const PORT = process.env.PhoPort || 2020;
   bank.listen(PORT, () => {
     console.log(`Phoenix Bank Server has gone live on ${PORT}`);
